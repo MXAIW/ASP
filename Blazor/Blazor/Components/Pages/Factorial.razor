@@ -1,0 +1,23 @@
+﻿@rendermode InteractiveServer
+@using System.Numerics;
+<hr />
+<h3>Factorial</h3>
+<div class=" Factorial">
+	<input type="number" @bind="n" @bind:after="Calculate" />
+	<h3>@n! = @f</h3>
+	@* <button @onclick="Calculate">Вычислить</button> *@
+</div>
+<hr />
+
+@code {
+	int n; // Исходное число для вычисления факториала
+	BigInteger f = 1; //Факториал
+	void Calculate()
+	{
+		f = 1;
+		for (int i = 1; i <= n; i++)
+		{
+			f *= i;
+		}
+	}
+}

@@ -1,0 +1,25 @@
+﻿@page "/Fibonacci"
+@rendermode InteractiveServer
+
+<h3>Fibonacci</h3>
+
+<input type="number" @bind="n" @bind:after="Calculate"/>
+
+@foreach(int i in row)
+{
+	<div>@i</div>
+}
+
+@code 
+{
+	int n = 0;
+	List<int> row = new List<int>();
+	void Calculate()
+	{
+		row = new List<int>();
+		for (int i = 0, a = 0, b = 1, c = a + b; i < n; i++, c = (a=b) + (b = c))
+		{
+			row.Add(a);
+		}
+	}
+}

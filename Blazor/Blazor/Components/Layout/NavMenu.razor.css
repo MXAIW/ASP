@@ -66,6 +66,12 @@
     background-image: url('img/atom.png');
 }
 
+.submenu
+{
+    margin-left: 24px;
+    margin-top: -20px;
+}
+
 .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;

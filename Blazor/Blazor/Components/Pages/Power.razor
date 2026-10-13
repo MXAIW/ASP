@@ -1,0 +1,35 @@
+﻿@page "/Power"
+@rendermode InteractiveServer
+
+<h3>Power</h3>
+
+<input type="number" @bind="a" @bind:after="Calculate" />
+<input type="number" @bind="n" @bind:after="Calculate" />
+
+<div>@r</div>
+
+@code {
+	int n = 2;		//Показатель степени
+	double a = 2;	//Основание степени
+	double r = 0;	//Результат
+	void Calculate()
+	{
+		double number = a;
+		double temp = 1;
+		int tempPower = n;
+
+		if (n < 0)
+		{
+			tempPower = -n;
+			number = 1 / a;
+		}
+
+		for (int i = 0; i < tempPower; i++)
+			temp *= number;
+
+		// if (n < 0)
+		// 	r = 1 / temp;
+		// else
+		 	r = temp;
+	}
+}

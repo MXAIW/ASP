@@ -23,6 +23,10 @@
 		<li>
 			<input type="checkbox" id="@item.Description" @bind="@item.DONE"/>
 			<label for="@item.Description">@item.Description</label>
+			<div @bind="item" 
+				@onclick="() => tasklist.RemoveAll(task => task == item)">
+				ꭓ
+			</div>
 		</li>
 	}
 </ul>

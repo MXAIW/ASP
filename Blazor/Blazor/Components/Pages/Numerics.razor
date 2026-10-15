@@ -1,0 +1,64 @@
+﻿@page "/Numerics"
+@rendermode InteractiveServer
+
+<h3>Numerics</h3>
+
+<div class="Numerics">
+    <button class="btn btn-primary" @onclick="() => openDec2Bin = !openDec2Bin">
+        Dec2Bin
+    </button>
+</div>
+
+@if (openDec2Bin)
+{
+    <div class="Numerics">
+        <input type="number" @bind="numberDec2Bin" @bind:after="Dec2Bin" />
+    </div>
+
+    <div>@resultDec2Bin</div>
+}
+<hr />
+
+<div class="Numerics">
+    <button class="btn btn-primary" @onclick="() => openDec2Hex = !openDec2Hex">
+        Dec2Hex
+    </button>
+</div>
+
+
+@if (openDec2Hex)
+{
+    <div class="Numerics">
+        <input type="number" @bind="numberDec2Hex" @bind:after="Dec2Hex" />
+    </div>
+
+    <div>@resultDec2Hex</div>
+}
+<hr />
+
+@code {
+    bool openDec2Bin = false;
+    bool openDec2Hex = false;
+    bool openBin2Dec = false;
+    bool openHex2Dec = false;
+
+    int numberDec2Bin; 
+    int numberDec2Hex;
+    int numberBin2Dec;
+    int numberHex2Dec;
+
+    int resultDec2Bin;
+    int resultDec2Hex;
+    int resultBin2Dec;
+    int resultHex2Dec;
+
+    void Dec2Bin()
+    {
+        
+    }
+
+    void Dec2Hex()
+    {
+
+    }
+}

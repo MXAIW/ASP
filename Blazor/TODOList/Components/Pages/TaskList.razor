@@ -1,0 +1,33 @@
+﻿@page "/tasklist"
+@rendermode InteractiveServer
+@using Models;
+
+<h3>TaskList</h3>
+
+<input type="text" @bind="description"/>
+<input type="button" value="Добавить" @onclick="addTask" class="btn btn-primary"/>
+<hr />
+<h5>Всего: @tasklist.Count</h5>
+<hr />
+
+<ul>
+	@foreach (TODO item in tasklist)
+	{
+		<li>@item.Description</li>
+	}
+</ul>
+
+@code {
+	List<Models.TODO> tasklist = [];
+	string description = "";
+
+	void addTask()
+	{
+		TODO item = new TODO { Description = description };
+		if (tasklist.Contains(item))
+			return;
+		tasklist.Add(item);
+		description = "";
+	}
+
+}

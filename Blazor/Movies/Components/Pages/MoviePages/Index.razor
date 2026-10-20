@@ -17,8 +17,8 @@
 </div>
 
 <QuickGrid Class="table" Items="context.Movie">
-    <PropertyColumn Property="movie => movie.Title" />
-    <PropertyColumn Property="movie => movie.ReleaseDate" />
+    <PropertyColumn Sortable="true" Property="movie => movie.Title" />
+    <PropertyColumn Sortable="true" Property="movie => movie.ReleaseDate" />
     @* <PropertyColumn Property="movie => movie.URL" />
     <PropertyColumn Property="movie => movie.Poster" /> *@
 

@@ -1,5 +1,13 @@
-﻿movie-container
+﻿.movie-container
 {
 	display:flex;
 	justify-content:space-between;
+}
+.movie-text-fields
+{
+	height:45%;
+}
+.image-container img
+{
+	max-width:500px;
 }

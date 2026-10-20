@@ -16,31 +16,40 @@
 }
 else
 {
+    <h1>@Movie.Title</h1>
+    <hr />
     <div class="row">
-        <div class="col-md-4">
+        <div>
             <EditForm method="post" Model="Movie" OnValidSubmit="UpdateMovie" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
-                <ValidationSummary role="alert"/>
-                <input type="hidden" name="Movie.id" value="@Movie.id" />
-                <div class="mb-3">
-                    <label for="title" class="form-label">Title:</label>
-                    <InputText id="title" @bind-Value="Movie.Title" class="form-control" />
-                    <ValidationMessage For="() => Movie.Title" class="text-danger" />
+				<ValidationSummary role="alert" />
+                <div class="movie-container">
+                    <div class="movie-text-fields">
+                        <input type="hidden" name="Movie.id" value="@Movie.id" />
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title:</label>
+                            <InputText id="title" @bind-Value="Movie.Title" class="form-control" />
+                            <ValidationMessage For="() => Movie.Title" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="releasedate" class="form-label">ReleaseDate:</label>
+                            <InputDate id="releasedate" @bind-Value="Movie.ReleaseDate" class="form-control" />
+                            <ValidationMessage For="() => Movie.ReleaseDate" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="url" class="form-label">URL:</label>
+                            <InputText id="url" @bind-Value="Movie.URL" class="form-control" />
+                            <ValidationMessage For="() => Movie.URL" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="poster" class="form-label">Poster:</label>
+                            <InputText id="poster" @bind-Value="Movie.Poster" class="form-control" />
+                            <ValidationMessage For="() => Movie.Poster" class="text-danger" />
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="releasedate" class="form-label">ReleaseDate:</label>
-                    <InputDate id="releasedate" @bind-Value="Movie.ReleaseDate" class="form-control" />
-                    <ValidationMessage For="() => Movie.ReleaseDate" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="url" class="form-label">URL:</label>
-                    <InputText id="url" @bind-Value="Movie.URL" class="form-control" />
-                    <ValidationMessage For="() => Movie.URL" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="poster" class="form-label">Poster:</label>
-                    <InputText id="poster" @bind-Value="Movie.Poster" class="form-control" />
-                    <ValidationMessage For="() => Movie.Poster" class="text-danger" />
+                <div class="image-container">
+                    <img src="@Movie.Poster" />
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
@@ -93,7 +102,8 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/movies");
+        NavigationManager.NavigateTo($"/movies/details?id={Movie.id}");
+        // NavigationManager.NavigateTo("/movies");
     }
 
     private bool MovieExists(int id)

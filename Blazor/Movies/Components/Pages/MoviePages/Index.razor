@@ -8,17 +8,19 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Index</h1>
+<div class="controls">
+    <h1>Index</h1>
 
-<p>
-    <a href="movies/create">Create New</a>
-</p>
+    <p>
+        <a href="movies/create" class="btn btn-primary">Create New</a>
+    </p>
+</div>
 
 <QuickGrid Class="table" Items="context.Movie">
     <PropertyColumn Property="movie => movie.Title" />
     <PropertyColumn Property="movie => movie.ReleaseDate" />
-    <PropertyColumn Property="movie => movie.URL" />
-    <PropertyColumn Property="movie => movie.Poster" />
+    @* <PropertyColumn Property="movie => movie.URL" />
+    <PropertyColumn Property="movie => movie.Poster" /> *@
 
     <TemplateColumn Context="movie">
         <a href="@($"movies/edit?id={movie.id}")">Edit</a> |

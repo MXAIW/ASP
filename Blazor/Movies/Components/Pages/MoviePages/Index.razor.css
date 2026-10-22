@@ -1,1 +1,11 @@
-﻿
+﻿.controls, .controls > div
+{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}
+.controls select
+{
+	width:48px;
+	text-align:right;
+}

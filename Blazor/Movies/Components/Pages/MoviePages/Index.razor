@@ -15,10 +15,18 @@
         <input type="search" name="titleFilter"/>
         <input type="submit" name="Поиск" class="btn btn-primary" />
     </form>
-
-    <p>
+    <label for="items-per-page">Items per page: </label>
+    <div>
+        <select id="items-per-page" @bind="pagination.ItemsPerPage" class="form-control">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="13">13</option>
+        </select>
+    </div>
+    <div>
         <a href="movies/create" class="btn btn-primary">Create New</a>
-    </p>
+    </div>
 </div>
 
 <QuickGrid Class="table" Items="FilteredMovies" Pagination="pagination">

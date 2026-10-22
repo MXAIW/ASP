@@ -21,7 +21,7 @@
     </p>
 </div>
 
-<QuickGrid Class="table" Items="filteredMovies">
+<QuickGrid Class="table" Items="FilteredMovies">
     <PropertyColumn Sortable="true" Property="movie => movie.Title" />
     <PropertyColumn Sortable="true" Property="movie => movie.ReleaseDate" />
     @* <PropertyColumn Property="movie => movie.URL" />
@@ -46,5 +46,5 @@
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
 
-    IQueryable<Movie> filteredMovies => context.Movie.Where(m => m.Title.Contains(TitleFilter));
+    IQueryable<Movie> FilteredMovies => context.Movie.Where(m => m.Title.Contains(TitleFilter ?? string.Empty));
 }

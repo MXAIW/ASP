@@ -9,19 +9,23 @@
 <h1>Details</h1>
 
 <div>
-    <h2>Direction</h2>
-    <hr />
+    @* <h2>Direction</h2>
+    <hr /> *@
     @if (direction is null)
     {
         <p><em>Loading...</em></p>
     }
     else {
+        <div class="controls">
+            <h1>@direction.direction_name</h1>
+            <a href="@($"/directions/edit?direction_id={direction.direction_id}")" class="btn btn-primary">Изменить</a>
+        </div>
+        < />
         <dl class="row">
             <dt class="col-sm-2">direction_name</dt>
             <dd class="col-sm-10">@direction.direction_name</dd>
         </dl>
         <div>
-            <a href="@($"/directions/edit?direction_id={direction.direction_id}")">Edit</a> |
             <a href="@($"/directions")">Back to List</a>
         </div>
     }

@@ -1,4 +1,5 @@
 @page "/directions"
+@rendermode InteractiveServer
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
@@ -10,24 +11,50 @@
 
 <div class="controls">
     <h1>Направления обучения (@context.Directions.Count())</h1>
-
+    <form action="/directions">
+        <input type="search" name="titleFilter" />
+        <input type="submit" name="Поиск" class="btn btn-primary" />
+    </form>
+    <label for="items-per-page">Items per page: </label>
+    <div>
+        <select id="items-per-page" @bind="pagination.ItemsPerPage" class="form-control">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="13">13</option>
+        </select>
+    </div>
     <p>
         <a href="directions/create" class="btn btn-primary">Добавить</a>
     </p>
 </div>
 
-<QuickGrid Class="table" Items="context.Directions">
-    <PropertyColumn Property="direction => direction.direction_name" />
+<div class="table-container">
+    <QuickGrid Class="table" Items="FilteredDirections" Pagination="pagination">
+        @* <PropertyColumn Sortable="true" Property="movie => movie.Title" /> *@
+        <TemplateColumn Context="direction" Title="direction" Sortable="true" SortBy="sortBy" Class="direction-title">
+            <a href="@($"direction/details?id={direction.direction_id}")">@direction.direction_name</a>
+        </TemplateColumn>
+        @* <PropertyColumn Property="movie => movie.URL" /> *@
+        @* <PropertyColumn Property="movie => movie.Poster" /> *@
 
-    <TemplateColumn Context="direction">
-        <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
-        <a href="@($"directions/details?direction_id={direction.direction_id}")">Details</a> |
-        <a href="@($"directions/delete?direction_id={direction.direction_id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+        @* <TemplateColumn Context="movie">
+		<a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
+		<a href="@($"movies/details?id={movie.Id}")">Details</a> |
+		<a href="@($"movies/delete?id={movie.Id}")">Delete</a>
+		</TemplateColumn> *@
+    </QuickGrid>
+</div>
+<Paginator State="pagination" />
 
 @code {
     private AcademyContext context = default!;
+    [SupplyParameterFromQuery]
+    string? TitleFilter { get; set; }
+
+    GridSort<Direction> sortBy = GridSort<Direction>.ByAscending(d => d.direction_name);
+
+    PaginationState pagination = new PaginationState { ItemsPerPage = 8 };
 
     protected override void OnInitialized()
     {
@@ -35,4 +62,6 @@
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
+
+    IQueryable<Direction> FilteredDirections => context.Directions.Where(d => d.direction_name.Contains(TitleFilter ?? string.Empty));
 }

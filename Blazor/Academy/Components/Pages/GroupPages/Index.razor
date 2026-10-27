@@ -8,18 +8,18 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Index</h1>
+<div>
+    <h1>Группы</h1>
 
-<p>
-    <a href="groups/create">Create New</a>
-</p>
+    <a href="groups/create" class="btn btn-primary">Добавить</a>
+</div>
 
-<QuickGrid Class="table" Items="context.Groups">
+<QuickGrid Class="table" Items="context.Groups.Include(g => g.Direction)">
     <PropertyColumn Property="group => group.group_name" />
     <PropertyColumn Property="group => group.start_date" />
     <PropertyColumn Property="group => group.start_time" />
 	<PropertyColumn Property="group => group.learning_days" />
-	<PropertyColumn Property="group => group.direction" />
+	<PropertyColumn Property="group => group.Direction.direction_name" />
 
     <TemplateColumn Context="group">
         <a href="@($"groups/edit?group_id={group.group_id}")">Edit</a> |

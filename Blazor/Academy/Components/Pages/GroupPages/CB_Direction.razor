@@ -1,0 +1,30 @@
+﻿@using Academy.Models;
+@using Microsoft.EntityFrameworkCore;
+@inject IDbContextFactory<AcademyContext> DbFactory
+
+<div class="mb-3">
+    <span class="text-danger">*</span>
+    <label for="durection" class="form-label">durection:</label>
+    <InputSelect id="durection" @bind-Value="Group.direction" class="form-control">
+        @using (AcademyContext context = DbFactory.CreateDbContext())
+        {
+            if (OnCreate)
+            {
+                <option selected disabled>--- Выберите направление обучения ---</option>
+            }
+            foreach (Direction direction in context.Directions)
+            {
+                <option value="@direction.direction_id">@direction.direction_name</option>
+            }
+        }
+    </InputSelect>
+    <ValidationMessage For="() => Group.direction" class="text-danger" />
+</div>
+
+@code {
+    [Parameter]
+    public Group Group { get; set; }
+
+    [Parameter]
+    public bool OnCreate { get; set; }
+}

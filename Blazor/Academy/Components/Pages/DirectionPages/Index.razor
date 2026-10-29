@@ -33,7 +33,7 @@
     <QuickGrid Class="table" Items="FilteredDirections" Pagination="pagination">
         @* <PropertyColumn Sortable="true" Property="movie => movie.Title" /> *@
         <TemplateColumn Context="direction" Title="direction" Sortable="true" SortBy="sortBy" Class="direction-title">
-            <a href="@($"direction/details?id={direction.direction_id}")">@direction.direction_name</a>
+            <a href="@($"directions/details?direction_id={direction.direction_id}")">@direction.direction_name</a>
         </TemplateColumn>
         @* <PropertyColumn Property="movie => movie.URL" /> *@
         @* <PropertyColumn Property="movie => movie.Poster" /> *@

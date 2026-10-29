@@ -30,13 +30,13 @@
 </div>
 
 <div class="table-container">
-    <QuickGrid Class="table" Items="FilteredDirections" Pagination="pagination">
-        @* <PropertyColumn Sortable="true" Property="movie => movie.Title" /> *@
-        <TemplateColumn Context="direction" Title="direction" Sortable="true" SortBy="sortBy" Class="direction-title">
+    @* <QuickGrid Class="table" Items="FilteredDirections" Pagination="pagination"> *@
+    <QuickGrid Class="table" Items="context.Directions.Include(d => d.Groups)" Pagination="pagination">
+        <PropertyColumn Sortable="true" Property="direction => direction.direction_name" />
+        <PropertyColumn Sortable="true" Property="direction => direction.Groups.Count" Title="Groups count"/>
+        @* <TemplateColumn Context="direction" Title="direction" Sortable="true" SortBy="sortBy" Class="direction-title">
             <a href="@($"directions/details?direction_id={direction.direction_id}")">@direction.direction_name</a>
-        </TemplateColumn>
-        @* <PropertyColumn Property="movie => movie.URL" /> *@
-        @* <PropertyColumn Property="movie => movie.Poster" /> *@
+        </TemplateColumn> *@
 
         @* <TemplateColumn Context="movie">
 		<a href="@($"movies/edit?id={movie.Id}")">Edit</a> |

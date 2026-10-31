@@ -13,7 +13,7 @@
 			List<string> result = new List<string>();
 			for(int i = 0; i < 7; i++)
 			{
-				if (days & (1 << i) != 0) result.Add(DAYNAMES[i]);
+				if ((days & (1 << i)) != 0) result.Add(DAYNAMES[i]);
 			}
 			return string.Join(",", result);
 		}

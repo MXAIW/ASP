@@ -41,11 +41,12 @@ else
                     <InputDate Type="InputDateType.Time" id="start_time" @bind-Value="Group.start_time" class="form-control" />
                     <ValidationMessage For="() => Group.start_time" class="text-danger" />
                 </div>
-                <div class="mb-3">
+                @* <div class="mb-3">
                     <label for="learning_days" class="form-label">learning_days:</label>
                     <InputNumber id="learning_days" @bind-Value="Group.learning_days" class="form-control" />
                     <ValidationMessage For="() => Group.learning_days" class="text-danger" />
-                </div>
+                </div> *@
+                <LearningDays Group="Group" />
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>

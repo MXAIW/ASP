@@ -1,4 +1,5 @@
 @page "/students"
+@rendermode InteractiveServer
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
@@ -17,26 +18,31 @@
 </div>
 
 <QuickGrid Class="table" Items="context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)">
-    <PropertyColumn Property="student => student.last_name" />
+    @* <PropertyColumn Property="student => student.last_name" />
     <PropertyColumn Property="student => student.first_name" />
-    <PropertyColumn Property="student => student.middle_name" />
-	<PropertyColumn Property="student => student.birth_date" />
+    <PropertyColumn Property="student => student.middle_name" /> *@
+    @* <PropertyColumn Property="student => student.full_name" Title="Студент" Sortable="true"/> *@
+    <TemplateColumn Context="student" title="Студент" Sortable="true" SortBy="sortBy" >
+        <a href=@($"/Students/details?stud_id={student.stud_id}")>@student.full_name</a>
+    </TemplateColumn>
+    <PropertyColumn Property="student => student.birth_date" Sortable="true" />
     <PropertyColumn Property="student => student.Group.group_name" />
     <PropertyColumn Property="student => student.Group.Direction.direction_name" />
     @* <PropertyColumn Property="student => student.email" />
     <PropertyColumn Property="student => student.phone" />
     <PropertyColumn Property="student => student.photo" /> *@
 
-    <TemplateColumn Context="student">
+    @* <TemplateColumn Context="student">
         <a href="@($"students/edit?stud_id={student.stud_id}")">Edit</a> |
         <a href="@($"students/details?stud_id={student.stud_id}")">Details</a> |
         <a href="@($"students/delete?stud_id={student.stud_id}")">Delete</a>
-    </TemplateColumn>
+    </TemplateColumn> *@
 </QuickGrid>
 
 @code {
     private AcademyContext context = default!;
 
+    GridSort<Student> sortBy = GridSort<Student>.ByAscending(s => s.last_name);
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();

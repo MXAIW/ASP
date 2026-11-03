@@ -8,27 +8,38 @@
 
 <PageTitle>Edit</PageTitle>
 
-<h1>Edit</h1>
+@* <h1>Edit</h1> *@
 
-<h2>Student</h2>
-<hr />
+@* <h2>Student</h2>
+<hr /> *@
 @if (Student is null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <h1>@Student.full_name</h1>
+    <hr />
     <div class="row">
         <div class="col-md-4">
             <EditForm method="post" Model="Student" OnValidSubmit="UpdateStudent" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert"/>
                 <input type="hidden" name="Student.stud_id" value="@Student.stud_id" />
-                <div class="mb-3">
+                @*<div class="mb-3">
                     <label for="group" class="form-label">group:</label>
-                    <InputNumber id="group" @bind-Value="Student.group" class="form-control" />
+                     <InputNumber id="group" @bind-Value="Student.group" class="form-control" />
+                    <InputSelect id="group" @bind-Value="Student.group" Class="form-control">
+                        @using(AcademyContext context = DbFactory.CreateDbContext())
+                        {
+                            foreach(Group group in context.Groups)
+                            {
+                                <option value="@group.group_id">@group.group_name</option>
+                            }
+                        }
+                    </InputSelect>
                     <ValidationMessage For="() => Student.group" class="text-danger" />
-                </div>
+                </div> *@
                 <div class="mb-3">
                 <span class="text-danger">*</span>
                     <label for="last_name" class="form-label">last_name:</label>
@@ -62,6 +73,7 @@ else
                     <InputText id="phone" @bind-Value="Student.phone" class="form-control" />
                     <ValidationMessage For="() => Student.phone" class="text-danger" />
                 </div>
+                <CP_Group Student="Student" />
                 @* <div class="mb-3">
                     <label for="photo" class="form-label">photo:</label>
                     <InputText id="photo" @bind-Value="Student.photo" class="form-control" />
@@ -73,9 +85,9 @@ else
     </div>
 }
 
-<div>
+@* <div>
     <a href="/students">Back to List</a>
-</div>
+</div> *@
 
 @code {
     [SupplyParameterFromQuery]
@@ -143,7 +155,7 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/students");
+        NavigationManager.NavigateTo($"/students/details?stud_id={stud_id}");
     }
 
     private bool StudentExists(int stud_id)

@@ -21,11 +21,13 @@
             <h1>@direction.direction_name</h1>
             <a href="@($"/directions/edit?direction_id={direction.direction_id}")" class="btn btn-primary">Изменить</a>
         </div>
-        < />
-        @* <dl class="row">
-            <dt class="col-sm-2">direction_name</dt>
-            <dd class="col-sm-10">@direction.direction_name</dd>
-        </dl> *@
+        <hr />
+       <dl class="row">
+            @*  <dt class="col-sm-2">direction_name</dt>
+            <dd class="col-sm-10">@direction.direction_name</dd>*@
+            <dt class="col-ms-2">Количество студентов</dt>
+            <dd class="col-sm-10">@direction.Groups.Sum(g => g.Students.Count)</dd>
+        </dl> 
         <h2>Количество групп: @direction.Groups.Count()</h2>
         <QuickGrid Items="direction.Groups.AsQueryable()" Class="table">
 			<PropertyColumn Property="group => group.group_name" />
@@ -55,7 +57,7 @@
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        direction = await context.Directions.Include(d => d.Groups).FirstOrDefaultAsync(m => m.direction_id == direction_id);
+        direction = await context.Directions.Include(d => d.Groups).ThenInclude(g => g.Students).FirstOrDefaultAsync(m => m.direction_id == direction_id);
 
         if (direction is null)
         {

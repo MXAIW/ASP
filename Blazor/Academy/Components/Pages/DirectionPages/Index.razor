@@ -31,17 +31,19 @@
 
 <div class="table-container">
     @* <QuickGrid Class="table" Items="FilteredDirections" Pagination="pagination"> *@
-    <QuickGrid Class="table" Items="context.Directions.Include(d => d.Groups)" Pagination="pagination">
-        <PropertyColumn Sortable="true" Property="direction => direction.direction_name" />
-        <PropertyColumn Sortable="true" Property="direction => direction.Groups.Count" Title="Groups count"/>
-        @* <TemplateColumn Context="direction" Title="direction" Sortable="true" SortBy="sortBy" Class="direction-title">
-            <a href="@($"directions/details?direction_id={direction.direction_id}")">@direction.direction_name</a>
-        </TemplateColumn> *@
+    <QuickGrid Class="table" Items="context.Directions.Include(d => d.Groups).ThenInclude(g => g.Students)" Pagination="pagination">
+		<TemplateColumn Context="direction" Title="direction" Sortable="true" SortBy="sortBy" Class="direction-title">
+			<a href="@($"directions/details?direction_id={direction.direction_id}")">@direction.direction_name</a>
+		</TemplateColumn> 
+        @* <PropertyColumn Sortable="true" Property="direction => direction.direction_name" /> *@
+        <PropertyColumn Sortable="true" Property="direction => direction.Groups.Count" Title="Groups count" />
+        <PropertyColumn Sortable="true" Property="direction => direction.Groups.Sum(g => g.Students.Count)" Title="Students count" />
+        
 
         @* <TemplateColumn Context="movie">
 		<a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
-		<a href="@($"movies/details?id={movie.Id}")">Details</a> |
-		<a href="@($"movies/delete?id={movie.Id}")">Delete</a>
+        <a href="@($"movies/details?id={Directions.direction_id}")">Details</a>*@
+        @*<a href="@($"movies/delete?id={movie.Id}")">Delete</a>
 		</TemplateColumn> *@
     </QuickGrid>
 </div>

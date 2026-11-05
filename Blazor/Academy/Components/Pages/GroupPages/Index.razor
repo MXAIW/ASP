@@ -1,4 +1,5 @@
 @page "/groups"
+@rendermode InteractiveServer
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
@@ -14,11 +15,15 @@
     <a href="groups/create" class="btn btn-primary">Добавить</a>
 </div>
 
-<QuickGrid Class="table" Items="context.Groups.Include(g => g.Direction)">
-    <PropertyColumn Property="group => group.group_name" />
-    <PropertyColumn Property="group => group.start_date" />
-    <PropertyColumn Property="group => group.start_time" />
-	<PropertyColumn Property="group => new Week((int)(group.learning_days ?? 0))" />
+<QuickGrid Class="table" Items="context.Groups.Include(g => g.Direction).Include(g => g.Students)">
+    <PropertyColumn Property="group => group.group_name" Sortable="true" />
+    <PropertyColumn Property="group => group.Students.Count" Sortable="true"/>
+    <PropertyColumn Property="group => group.start_date" Sortable="true" />
+    <PropertyColumn Property="group => group.start_time" Sortable="true" />
+    @* <PropertyColumn Property="group => new Week((int)(group.learning_days ?? 0))" Sortable="true" /> *@
+    <TemplateColumn Context="group" Title="Учебные дни" Sortable="true" SortBy="@sortByLearningDays">
+        @(new Week((int)(group.learning_days ?? 0)))
+    </TemplateColumn>
 	<PropertyColumn Property="group => group.Direction.direction_name" />
 
     <TemplateColumn Context="group">
@@ -30,6 +35,7 @@
 
 @code {
     private AcademyContext context = default!;
+    GridSort<Group> sortByLearningDays = GridSort<Group>.ByAscending(g => g.learning_days);
 
     protected override void OnInitialized()
     {

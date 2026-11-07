@@ -8,9 +8,20 @@
 	width:50%;
 	min-width:400px;
 }
+.human-edit-fields
+{
+	width: 40%;
+	min-width: 400px;
+}
 .photo-area
 {
 	width:40%;
+}
+.photo-area > div
+{
+	width:100%;
+	height:80%;
+	border:solid 1px;
 }
 .photo-area img
 {

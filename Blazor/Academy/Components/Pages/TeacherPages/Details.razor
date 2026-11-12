@@ -48,6 +48,13 @@
             </dl>
             <Photo Human="teacher" AllowChange="false"/>
         </div>
+        <h3>Преподаваемые дисциплины</h3>
+        <ul>
+            @foreach (TeachersDisciplinesRelation tdr in teacher.TDR)
+            {
+                <li>@tdr.Discipline.discipline_name</li>
+            }
+        </ul>
         <div>
             <a href="@($"/teachers")">Back to List</a>
         </div>
@@ -63,7 +70,7 @@
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        teacher = await context.Teachers.FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
+        teacher = await context.Teachers.Include(t => t.TDR).ThenInclude(tdr => tdr.Discipline).FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
 
         if (teacher is null)
         {

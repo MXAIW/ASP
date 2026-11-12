@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,6 @@ namespace Academy.Models
 		public int number_of_lessons { get; set; }
 
 		// Navigation properties:
-		public ICollection<TeachersDisciplinesRelation> TDR { get; set; }
+		public ObservableCollection<TeachersDisciplinesRelation> TDR { get; set; }
 	}
 }

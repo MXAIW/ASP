@@ -88,7 +88,10 @@ else
                     <ValidationMessage For="() => Teacher.age" class="text-danger" />
                     </div> *@
 				</div>
-                 <Photo Human="Teacher" AllowChange=true />
+                <div>
+                    <Photo Human="Teacher" AllowChange=true />
+                    <AddDisciplines Teacher="Teacher" />
+                </div>
              </div>
              <button type="submit" class="btn btn-primary">Save</button>
          </EditForm>

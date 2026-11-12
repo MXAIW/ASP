@@ -1,0 +1,51 @@
+﻿@using Academy.Models;
+@using Microsoft.EntityFrameworkCore;
+@inject IDbContextFactory<AcademyContext> DbFactory;
+@* <h3>AddDisciplines</h3> *@
+
+<form>
+	<h5>Выберите дисциплину</h5>
+	<InputSelect @bind-Value="disciplines" class="form-control">
+		<Option value="-1" disabled>--- Выберите дисциплину ---</Option>
+		@foreach (Discipline discipline in Disciplines)
+		{
+			<option value="@discipline.discipline_id">@discipline.discipline_name</option>
+		}
+	</InputSelect>
+	<button class="btn btn-primary">Добавить</button>
+	<ul>
+		@foreach(TeachersDisciplinesRelation tdr in NewDisciplines)
+		{
+			<li>@tdr.Discipline.discipline_name</li>
+		}
+	</ul>
+	<hr />
+	<ul>
+		@foreach(TeachersDisciplinesRelation tdr in TDR)
+		{
+			<li>@tdr.Discipline.discipline_name</li>
+		}
+	</ul>	
+</form>
+
+@code 
+{
+	[Parameter]
+	public Teacher Teacher { get; set; }
+	ICollection<Discipline> Disciplines { get; set; }
+	ICollection<TeachersDisciplinesRelation> TDR { get; set; }
+	List<TeachersDisciplinesRelation> NewDisciplines = new List<TeachersDisciplinesRelation>();
+
+	int disciplines = -1;
+
+	protected override void OnInitialized()
+	{
+		using AcademyContext context = DbFactory.CreateDbContext();
+		Disciplines = context.Disciplines.ToList();
+		TDR = context.TeachersDisciplinesRelation.Where(t => t.teacher == Teacher.teacher_id).ToList();
+	}
+	void AddDiscipline()
+	{
+		//TODO: Add selected discipline to Teachers TDR
+	}
+}

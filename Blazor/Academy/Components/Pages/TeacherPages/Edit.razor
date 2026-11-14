@@ -23,12 +23,12 @@ else
     <hr />
     <div class="row">
          <EditForm method="post" Model="Teacher" OnValidSubmit="UpdateTeacher" FormName="edit" Enhance>
-			<div class="human-edit-fields">
-				<div class="human-text-fields">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary role="alert" />
-                    <input type="hidden" name="Teacher.teacher_id" value="@Teacher.teacher_id" />
-                    <div class="mb-3">
+				<div class="human-container">
+					<div class="human-edit-fields">
+						<DataAnnotationsValidator />
+						<ValidationSummary role="alert" />
+						<input type="hidden" name="Teacher.teacher_id" value="@Teacher.teacher_id" />
+						<div class="mb-3">
                         <span class="text-danger">*</span>
                         <label for="work_since" class="form-label">work_since:</label>
                         <InputDate id="work_since" @bind-Value="Teacher.work_since" class="form-control" aria-required="true" />
@@ -89,13 +89,13 @@ else
                     </div> *@
 				</div>
                 <div>
-                    <Photo Human="Teacher" AllowChange=true />
+                    <Photo Human="Teacher" AllowChange="true" />
                     <AddDisciplines Teacher="Teacher" />
                 </div>
              </div>
              <button type="submit" class="btn btn-primary">Save</button>
-         </EditForm>
-    </div>
+            </EditForm>
+        </div>
 }
 
 <div>

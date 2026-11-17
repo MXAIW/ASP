@@ -109,6 +109,8 @@ else
     [SupplyParameterFromForm]
     private Teacher? Teacher { get; set; }
 
+    AddDisciplines? addDisciplines;
+
     private PersistingComponentStateSubscription? persistingSubscription;
 
     protected override async Task OnInitializedAsync()
@@ -154,6 +156,7 @@ else
 
         try
         {
+            if (addDisciplines != null) await addDisciplines.Update();
             await context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)

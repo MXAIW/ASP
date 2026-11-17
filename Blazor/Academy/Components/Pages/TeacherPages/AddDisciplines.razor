@@ -21,7 +21,7 @@
 		}
 		
 	</InputSelect>
-	<button class="btn btn-primary" @onclick="AddDiscipline">Добавить</button>
+	<button type="button" class="btn btn-primary" @onclick="AddDiscipline">Добавить</button>
 	<ul>
 		@foreach(TeachersDisciplinesRelation tdr in NewDisciplines)
 		{
@@ -57,12 +57,12 @@
 		TDR = await context.TeachersDisciplinesRelation.Where(t => t.teacher == Teacher.teacher_id).ToListAsync();
 	}
 
-	protected override void OnInitialized()
-	{
-		using AcademyContext context = DbFactory.CreateDbContext();
-		Disciplines = context.Disciplines.ToList();
-		TDR = context.TeachersDisciplinesRelation.Where(t => t.teacher == Teacher.teacher_id).ToList();
-	}
+	// protected override void OnInitialized()
+	// {
+	// 	using AcademyContext context = DbFactory.CreateDbContext();
+	// 	Disciplines = context.Disciplines.ToList();
+	// 	TDR = context.TeachersDisciplinesRelation.Where(t => t.teacher == Teacher.teacher_id).ToList();
+	// }
 	void AddDiscipline()
 	{
 		//TODO: Add selected discipline to Teachers TDR
@@ -72,8 +72,9 @@
 				teacher = Teacher.teacher_id,
 				discipline = this.discipline
 			};
-		newRelation.Teacher = this.Teacher;
+		//newRelation.Teacher = this.Teacher;
 		newRelation.Discipline = Disciplines.Where(d => d.discipline_id == this.discipline).FirstOrDefault();
+		if (NewDisciplines.Any(d => d.discipline == discipline)) return;
 		NewDisciplines.Add
 		(
 			newRelation
@@ -82,6 +83,12 @@
 	}
 	public async Task Update()
 	{
+		using AcademyContext context = DbFactory.CreateDbContext();
+		List<TeachersDisciplinesRelation> pairs = new List<TeachersDisciplinesRelation>();
+		foreach (TeachersDisciplinesRelation tdr in NewDisciplines)
+			pairs.Add(new TeachersDisciplinesRelation { teacher = Teacher.teacher_id, discipline = tdr.discipline });
 
+		await context.TeachersDisciplinesRelation.AddRangeAsync(pairs);
+		await context.SaveChangesAsync();
 	}
 }

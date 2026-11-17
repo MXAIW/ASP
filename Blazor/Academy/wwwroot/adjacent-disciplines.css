@@ -1,0 +1,10 @@
+﻿adjacent-disciplines
+{
+	width:100%;
+	display:flex;
+	justify-content:space-between;
+}
+adjacent-disciplines > div
+{
+	min-width:45%;
+}

@@ -10,6 +10,7 @@ public class AcademyContext(DbContextOptions<AcademyContext> options) : DbContex
     public DbSet<Academy.Models.Discipline> Disciplines { get; set; } = default!;
     public DbSet<Academy.Models.TeachersDisciplinesRelation> TeachersDisciplinesRelation { get; set; } = default!;
     public DbSet<Academy.Models.DependentDisciplines> DependentDisciplines { get; private set; } = default!;
+    public DbSet<Academy.Models.DependentDisciplines> RequiredDisciplines { get; private set; } = default!;
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -17,10 +18,15 @@ public class AcademyContext(DbContextOptions<AcademyContext> options) : DbContex
             .HasMany(d => d.DependentDisciplines)
             .WithOne(dd => dd.Discipline)
             .HasForeignKey(dd => dd.discipline);
-        
-        modelBuilder.Entity<Discipline>()
-            .HasMany(d => d.RequiredDisciplines)
-            .WithOne(rd  => rd.Discipline)
-            .HasForeignKey(rd => rd.discipline);
+
+		modelBuilder.Entity<Discipline>()
+			.HasMany(d => d.RequiredDisciplines)
+			.WithOne(rd => rd.DependentDiscipline)
+			.HasForeignKey(rd => rd.dependent_discipline);
+
+		//modelBuilder.Entity<Discipline>()
+		//    .HasMany(d => d.RequiredDisciplines)
+		//    .WithOne(rd  => rd.Discipline)
+		//    .HasForeignKey(rd => rd.discipline);
 	}
 }

@@ -10,10 +10,10 @@ namespace Academy.Models
 	{
 		[Column("discipline", TypeName = "SMALLINT")]
 		[ForeignKey(nameof(Discipline))]
-		public int discipline {  get; set; }
+		public int discipline { get; set; }
 
-		[Column("required", TypeName = "SMALLINT")]
-		[ForeignKey(nameof(required_discipline))]
+		[Column("required_discipline", TypeName = "SMALLINT")]
+		[ForeignKey(nameof(RequiredDiscipline))]
 		public int required_discipline { get; set; }
 
 		//Navigation properties:

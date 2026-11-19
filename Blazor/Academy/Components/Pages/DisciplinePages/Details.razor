@@ -46,12 +46,12 @@
 				<h5>Зависимые дисциплины</h5>
 				@if (discipline.DependentDisciplines != null)
 				{
-				<ul>
-					@foreach (DependentDisciplines dd in discipline.DependentDisciplines)
-					{
-					<li>@dd.DependentDiscipline.discipline_name</li>
-					}
-				</ul>
+					<ul>
+						@foreach (DependentDisciplines dd in discipline.DependentDisciplines)
+						{
+							<li>@dd.DependentDiscipline.discipline_name</li>
+						}
+					</ul>
 				}
 			</div>
 		</div>
@@ -76,12 +76,12 @@
 	{
 		using var context = DbFactory.CreateDbContext();
 		discipline = await context.Disciplines.Include(d => d.TDR)
-				.ThenInclude(tdr => tdr.Teacher)
-			.Include(d => d.DependentDisciplines)
-				.ThenInclude(dd => dd.DependentDiscipline)
-			.Include(d => d.RequiredDisciplines)
-				.ThenInclude(rd => rd.RequiredDiscipline)
-			.FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
+										.ThenInclude(tdr => tdr.Teacher)
+									.Include(d => d.DependentDisciplines)
+										.ThenInclude(dd => dd.DependentDiscipline)
+									.Include(d => d.RequiredDisciplines)
+										.ThenInclude(rd => rd.RequiredDiscipline)
+									.FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
 
 		if (discipline is null)
 		{

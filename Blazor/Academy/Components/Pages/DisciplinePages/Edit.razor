@@ -1,4 +1,5 @@
 @page "/disciplines/edit"
+@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @implements IDisposable
 @using Academy.Models
@@ -20,7 +21,7 @@ else
 {
     <h1>@Discipline.discipline_name</h1>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-7">
             <EditForm method="post" Model="Discipline" OnValidSubmit="UpdateDiscipline" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert"/>
@@ -37,7 +38,8 @@ else
                     <InputNumber id="number_of_lessons" @bind-Value="Discipline.number_of_lessons" class="form-control" aria-required="true"/>
                     <ValidationMessage For="() => Discipline.number_of_lessons" class="text-danger" />
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
+				<button type="submit" class="btn btn-primary">Save</button>
+				<AddRequiredDiscipline Discipline="Discipline" />
             </EditForm>
         </div>
     </div>
@@ -65,7 +67,11 @@ else
             if (!ApplicationState.TryTakeFromJson<Discipline>(nameof(Discipline), out var restoredDiscipline))
             {
                 using var context = DbFactory.CreateDbContext();
-                Discipline = await context.Disciplines.FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
+                Discipline = await context.Disciplines
+                                            .Include(d => d.RequiredDisciplines)
+                                            .ThenInclude(rd =>rd.Discipline)
+                                            .Include(d => d.DependentDisciplines)
+                                            .FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
             }
             else
             {

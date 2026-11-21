@@ -64,4 +64,11 @@
 		this.requiredDisciplines.Add(rd);
 		this.discipline = -1;
 	}
+	public void Update()
+	{
+		List<DependentDisciplines> stagedDisciplines =
+		Discipline.RequiredDisciplines.AsEnumerable().ToList();//.AddRange(requiredDisciplines);
+		stagedDisciplines.AddRange(requiredDisciplines);
+		Discipline.RequiredDisciplines = new System.Collections.ObjectModel.ObservableCollection<DependentDisciplines> (stagedDisciplines);
+	}
 }

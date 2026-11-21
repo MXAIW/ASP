@@ -39,7 +39,7 @@ else
                     <ValidationMessage For="() => Discipline.number_of_lessons" class="text-danger" />
                 </div>
 				<button type="submit" class="btn btn-primary">Save</button>
-				<AddRequiredDiscipline Discipline="Discipline" />
+				<AddRequiredDiscipline @ref="addRequiredDiscipline" Discipline="Discipline" />
             </EditForm>
         </div>
     </div>
@@ -55,6 +55,8 @@ else
 
     [SupplyParameterFromForm]
     private Discipline? Discipline { get; set; }
+
+    AddRequiredDiscipline addRequiredDiscipline;
 
     private PersistingComponentStateSubscription? persistingSubscription;
 
@@ -105,6 +107,7 @@ else
 
         try
         {
+            addRequiredDiscipline.Update();
             await context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)

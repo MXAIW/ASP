@@ -6,19 +6,21 @@
 
 <div>
 	<form>
-		<InputSelect @bind-Value="discipline" class="form-control">
-			<option disabled value="-1">--- Выберите дисциплину ---</option>
-			@foreach(Discipline d in disciplines)
-			{
-				if 
+		<div class="disciplines-dropdown-container">
+			<InputSelect @bind-Value="discipline" class="form-control">
+				<option disabled value="-1">--- Выберите дисциплину ---</option>
+				@foreach(Discipline d in disciplines)
+				{
+				if
 				(
-					Discipline.DependentDisciplines.Where(dd => dd.dependent_discipline == d.discipline_id).Any() ||
-					dependentDisciplines.Where(dd => dd.dependent_discipline == d.discipline_id).Any()
+				Discipline.DependentDisciplines.Where(dd => dd.dependent_discipline == d.discipline_id).Any() ||
+				dependentDisciplines.Where(dd => dd.dependent_discipline == d.discipline_id).Any()
 				) continue;
 				<option value="@d.discipline_id">@d.discipline_name</option>
-			}
-		</InputSelect>
-		<button type="button" class="btn btn-primary" @onclick="AddDiscipline">Добавить</button>
+				}
+			</InputSelect>
+			<button type="button" class="btn btn-primary" @onclick="AddDiscipline">Добавить</button>
+		</div>
 		@if(dependentDisciplines.Count > 0)
 		{
 			<ul>
@@ -69,5 +71,12 @@
 			}
 		);
 		discipline = -1;
+	}
+	public void Update()
+	{
+		List<DependentDisciplines> stagedDisciplines = Discipline.DependentDisciplines.ToList();
+		stagedDisciplines.AddRange(dependentDisciplines);
+		Discipline.DependentDisciplines = new System.Collections.ObjectModel.ObservableCollection<DependentDisciplines>(stagedDisciplines);
+
 	}
 }

@@ -42,7 +42,7 @@ else
 		    </div>
             <div class="abjacent-disciplines">
                 <AddRequiredDiscipline @ref="addRequiredDiscipline" Discipline="Discipline" />
-                <AddDependentDiscipline Discipline="Discipline" />
+                <AddDependentDiscipline @ref="addDependentDiscipline" Discipline="Discipline" />
             </div>
             </EditForm>
     </div>
@@ -60,6 +60,7 @@ else
     private Discipline? Discipline { get; set; }
 
     AddRequiredDiscipline addRequiredDiscipline;
+    AddDependentDiscipline addDependentDiscipline;
 
     private PersistingComponentStateSubscription? persistingSubscription;
 
@@ -112,6 +113,7 @@ else
         try
         {
             addRequiredDiscipline.Update();
+            addDependentDiscipline.Update();
             await context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)

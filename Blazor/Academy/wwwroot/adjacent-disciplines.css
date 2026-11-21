@@ -16,3 +16,9 @@
 {
 	list-style:none;
 }
+.disciplines-dropdown-container
+{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}

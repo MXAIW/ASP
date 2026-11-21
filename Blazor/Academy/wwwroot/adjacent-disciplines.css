@@ -1,10 +1,18 @@
-﻿adjacent-disciplines
+﻿.adjacent-disciplines
 {
 	width:100%;
 	display:flex;
 	justify-content:space-between;
 }
-adjacent-disciplines > div
+.adjacent-disciplines > div
 {
 	min-width:45%;
+}
+.adjacent-disciplines > div
+{
+	margin:16px;
+}
+.adjacent-disciplines > div ul
+{
+	list-style:none;
 }

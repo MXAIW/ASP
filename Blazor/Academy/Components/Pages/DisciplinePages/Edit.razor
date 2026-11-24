@@ -75,7 +75,7 @@ else
                 using var context = DbFactory.CreateDbContext();
                 Discipline = await context.Disciplines
                                             .Include(d => d.RequiredDisciplines)
-                                            .ThenInclude(rd =>rd.Discipline)
+                                            .ThenInclude(rd => rd.Discipline)
                                             .Include(d => d.DependentDisciplines)
                                             .ThenInclude(dd => dd.DependentDiscipline)
                                             .FirstOrDefaultAsync(m => m.discipline_id == discipline_id);

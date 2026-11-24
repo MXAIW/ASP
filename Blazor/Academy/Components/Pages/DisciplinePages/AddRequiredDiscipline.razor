@@ -10,11 +10,11 @@
 			<option disabled value="-1">--- Выберите дисциплину ---</option>
 			@foreach (Discipline d in disciplines)
 			{
-			if (
-			Discipline.RequiredDisciplines.Where(rd => rd.discipline == d.discipline_id).Any() ||
-			requiredDisciplines.Where(rd => rd.discipline == d.discipline_id).Any())
-			continue;
-			<option value="@d.discipline_id">@d.discipline_name</option>
+				if (
+					Discipline.RequiredDisciplines.Where(rd => rd.discipline == d.discipline_id).Any() ||
+					requiredDisciplines.Where(rd => rd.discipline == d.discipline_id).Any())
+					continue;
+				<option value="@d.discipline_id">@d.discipline_name</option>
 			}
 		</InputSelect>
 		<button type="button" @onclick="addDiscipline" class="btn btn-primary">Добавить</button>

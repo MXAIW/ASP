@@ -21,6 +21,8 @@
 		</div>
 		<hr />
 		<dl class="row">
+			<dt class="col-sm-2">discipline_id</dt>
+			<dd class="col-sm-10">@discipline.discipline_id</dd>
 			<dt class="col-sm-2">discipline_name</dt>
 			<dd class="col-sm-10">@discipline.discipline_name</dd>
 			<dt class="col-sm-2">number_of_lessons</dt>
@@ -30,7 +32,7 @@
 			<a href="@($"/disciplines")">Back to List</a>
 		</div>
 		<div class="adjacent-disciplines">
-			<div>
+			@* <div>
 				<h5>Требуемые дисциплины</h5>
 				@if (discipline.RequiredDisciplines != null)
 				{
@@ -41,6 +43,20 @@
 					}
 				</ul>
 				}
+			</div> *@
+			<div>
+				<h5>Требуемые дисциплины</h5>
+				@if (discipline.DependentDisciplines != null)
+				{
+					<ul>
+						@foreach (DependentDisciplines rd in discipline.RequiredDisciplines)
+						{
+							<li>
+								<a href=@($"/Disciplines/details?discipline_id={rd.Discipline.discipline_id}")>@rd.Discipline.discipline_name</a>
+							</li>
+						}
+					</ul>
+				}
 			</div>
 			<div>
 				<h5>Зависимые дисциплины</h5>
@@ -49,7 +65,9 @@
 					<ul>
 						@foreach (DependentDisciplines dd in discipline.DependentDisciplines)
 						{
-							<li>@dd.DependentDiscipline.discipline_name</li>
+							<li>
+								<a href=@($"/Disciplines/details?discipline_id={dd.dependent_discipline}")>@dd.DependentDiscipline.discipline_name</a>
+							</li>
 						}
 					</ul>
 				}
@@ -72,6 +90,8 @@
 	[SupplyParameterFromQuery]
 	private int discipline_id { get; set; }
 
+	List<Discipline> requiredDisciplines { get; set; }
+
 	protected override async Task OnInitializedAsync()
 	{
 		using var context = DbFactory.CreateDbContext();
@@ -79,8 +99,8 @@
 										.ThenInclude(tdr => tdr.Teacher)
 									.Include(d => d.DependentDisciplines)
 										.ThenInclude(dd => dd.DependentDiscipline)
-									.Include(d => d.RequiredDisciplines)
-										.ThenInclude(rd => rd.RequiredDiscipline)
+									 .Include(d => d.RequiredDisciplines)
+									 	.ThenInclude(rd => rd.Discipline)
 									.FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
 
 		if (discipline is null)

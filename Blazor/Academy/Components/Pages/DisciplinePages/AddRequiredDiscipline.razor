@@ -1,0 +1,76 @@
+﻿@using Academy.Models;
+@using Microsoft.EntityFrameworkCore;
+@inject IDbContextFactory<AcademyContext> DbFactory;
+
+<h3>AddRequiredDiscipline</h3>
+
+<form>
+	<div class="disciplines-dropdown-container">
+		<InputSelect @bind-Value="discipline" class="form-control">
+			<option disabled value="-1">--- Выберите дисциплину ---</option>
+			@foreach (Discipline d in disciplines)
+			{
+				if (
+					Discipline.RequiredDisciplines.Where(rd => rd.discipline == d.discipline_id).Any() ||
+					requiredDisciplines.Where(rd => rd.discipline == d.discipline_id).Any())
+					continue;
+				<option value="@d.discipline_id">@d.discipline_name</option>
+			}
+		</InputSelect>
+		<button type="button" @onclick="addDiscipline" class="btn btn-primary">Добавить</button>
+	</div>
+	<ul>
+		@foreach(DependentDisciplines rd in requiredDisciplines)
+		{
+			<li>@rd.Discipline.discipline_name</li>
+		}
+	</ul>
+	<hr />
+	<ul>
+		@foreach (DependentDisciplines rd in Discipline.RequiredDisciplines)
+		{
+			<li>@rd.Discipline.discipline_name</li>
+		}
+	</ul>
+
+</form>
+
+@code 
+{
+	[Parameter]
+	public Discipline Discipline { get; set; }
+
+	//[Parameter]
+	//public List<RequiredDisciplines> requiredDisciplines { get; set; }
+
+	List<Discipline> disciplines = default!;
+	List<DependentDisciplines> requiredDisciplines = new List<DependentDisciplines>();
+	int discipline = -1;
+
+	protected override void OnInitialized()
+	{
+		disciplines = DbFactory.CreateDbContext()
+								.Disciplines.Where(d => d.discipline_id != Discipline.discipline_id)
+								.ToList();
+	}
+	void addDiscipline()
+	{
+		if (discipline == -1) return;
+		DependentDisciplines rd = new DependentDisciplines
+			{
+				discipline = this.discipline,
+				dependent_discipline = Discipline.discipline_id,
+				Discipline = DbFactory.CreateDbContext().Disciplines.Where(d => d.discipline_id == this.discipline).First(),
+				DependentDiscipline = Discipline
+			};
+		this.requiredDisciplines.Add(rd);
+		this.discipline = -1;
+	}
+	public void Update()
+	{
+		List<DependentDisciplines> stagedDisciplines =
+		Discipline.RequiredDisciplines.AsEnumerable().ToList();//.AddRange(requiredDisciplines);
+		stagedDisciplines.AddRange(requiredDisciplines);
+		Discipline.RequiredDisciplines = new System.Collections.ObjectModel.ObservableCollection<DependentDisciplines> (stagedDisciplines);
+	}
+}

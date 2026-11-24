@@ -78,7 +78,8 @@
 		<ul>
 			@foreach (TeachersDisciplinesRelation tdr in discipline.TDR)
 			{
-				<li>@tdr.Teacher.full_name</li>
+				<li>
+					<a href=@($"/Teachers/details?teacher_id={tdr.teacher}")> @tdr.Teacher.full_name </a></li>
 			}
 		</ul>
 	}

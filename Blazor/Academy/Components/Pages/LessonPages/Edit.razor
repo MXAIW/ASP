@@ -1,0 +1,148 @@
+@page "/lessons/edit"
+@using Microsoft.EntityFrameworkCore
+@implements IDisposable
+@using Academy.Models
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+@inject PersistentComponentState ApplicationState
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Lesson</h2>
+<hr />
+@if (Lesson is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Lesson" OnValidSubmit="UpdateLesson" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Lesson.lesson_id" value="@Lesson.lesson_id" />
+                <div class="mb-3">
+                <span class="text-danger">*</span>
+                    <label for="group" class="form-label">group:</label>
+                    <InputNumber id="group" @bind-Value="Lesson.group" class="form-control" aria-required="true"/>
+                    <ValidationMessage For="() => Lesson.group" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                <span class="text-danger">*</span>
+                    <label for="discipline" class="form-label">discipline:</label>
+                    <InputNumber id="discipline" @bind-Value="Lesson.discipline" class="form-control" aria-required="true"/>
+                    <ValidationMessage For="() => Lesson.discipline" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                <span class="text-danger">*</span>
+                    <label for="teacher" class="form-label">teacher:</label>
+                    <InputNumber id="teacher" @bind-Value="Lesson.teacher" class="form-control" aria-required="true"/>
+                    <ValidationMessage For="() => Lesson.teacher" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                <span class="text-danger">*</span>
+                    <label for="date" class="form-label">date:</label>
+                    <InputDate id="date" @bind-Value="Lesson.date" class="form-control" aria-required="true"/>
+                    <ValidationMessage For="() => Lesson.date" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                <span class="text-danger">*</span>
+                    <label for="time" class="form-label">time:</label>
+                    <InputDate id="time" @bind-Value="Lesson.time" class="form-control" aria-required="true"/>
+                    <ValidationMessage For="() => Lesson.time" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="spent" class="form-label">spent:</label>
+                    <InputCheckbox id="spent" @bind-Value="Lesson.spent" class="form-check-input" />
+                    <ValidationMessage For="() => Lesson.spent" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/lessons">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private long lesson_id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Lesson? Lesson { get; set; }
+
+    private PersistingComponentStateSubscription? persistingSubscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        persistingSubscription ??= ApplicationState.RegisterOnPersisting(PersistData);
+
+        if (Lesson is null)
+        {
+            if (!ApplicationState.TryTakeFromJson<Lesson>(nameof(Lesson), out var restoredLesson))
+            {
+                using var context = DbFactory.CreateDbContext();
+                Lesson = await context.Schedule.FirstOrDefaultAsync(m => m.lesson_id == lesson_id);
+            }
+            else
+            {
+                Lesson = restoredLesson;
+            }
+        }
+
+        if (Lesson is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+    }
+
+    private Task PersistData()
+    {
+        if (Lesson is not null)
+        {
+            ApplicationState.PersistAsJson(nameof(Lesson), Lesson);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateLesson()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Lesson!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!LessonExists(Lesson!.lesson_id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/lessons");
+    }
+
+    private bool LessonExists(long lesson_id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Schedule.Any(e => e.lesson_id == lesson_id);
+    }
+
+    public void Dispose() => persistingSubscription?.Dispose();
+}

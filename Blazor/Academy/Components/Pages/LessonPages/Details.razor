@@ -1,0 +1,56 @@
+@page "/lessons/details"
+@using Microsoft.EntityFrameworkCore
+@using Academy.Models
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Lesson</h2>
+    <hr />
+    @if (lesson is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">group</dt>
+            <dd class="col-sm-10">@lesson.group</dd>
+            <dt class="col-sm-2">discipline</dt>
+            <dd class="col-sm-10">@lesson.discipline</dd>
+            <dt class="col-sm-2">teacher</dt>
+            <dd class="col-sm-10">@lesson.teacher</dd>
+            <dt class="col-sm-2">date</dt>
+            <dd class="col-sm-10">@lesson.date</dd>
+            <dt class="col-sm-2">time</dt>
+            <dd class="col-sm-10">@lesson.time</dd>
+            <dt class="col-sm-2">spent</dt>
+            <dd class="col-sm-10">@lesson.spent</dd>
+        </dl>
+        <div>
+            <a href="@($"/lessons/edit?lesson_id={lesson.lesson_id}")">Edit</a> |
+            <a href="@($"/lessons")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Lesson? lesson;
+
+    [SupplyParameterFromQuery]
+    private long lesson_id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        lesson = await context.Schedule.FirstOrDefaultAsync(m => m.lesson_id == lesson_id);
+
+        if (lesson is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

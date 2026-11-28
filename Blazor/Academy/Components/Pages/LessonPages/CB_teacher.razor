@@ -28,19 +28,22 @@
 	[Parameter]
 	public Teacher Teacher { get; set; }
 	[Parameter]
+	public EventCallback<Teacher> TeacherChanged { get; set; }
+	[Parameter]
 	public Discipline Discipline { get; set; }
 	[Parameter]
 	public AcademyContext Context { get; set; }
 	int teacher = -1;
 
-	protected override void OnInitialized()
-	{
-		//=> this.teacher = Discipline != null ? -1 : -2;
-	}
-	
-
 	protected override void OnParametersSet()
 	{
-		
+		if (teacher > 0) 
+			teacher = Discipline != null ? - 1 : -2;
+	}
+
+	void SetTeacher()
+	{
+		Teacher = Context.Teachers.Where(t => t.teacher_id == teacher).First();
+		TeacherChanged.InvokeAsync(Teacher);
 	}
 }

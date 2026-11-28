@@ -1,0 +1,35 @@
+﻿@using Academy.Models;
+@using Microsoft.EntityFrameworkCore;
+@inject IDbContextFactory<AcademyContext> DbFactory;
+<div class="mb-3">
+    <span class="text-danger">*</span>
+    <label for="group" class="form-label">group:</label>
+    @* <InputNumber id="group" @bind-Value="Lesson.group" class="form-control" aria-required="true" /> *@
+    @* <ValidationMessage For="() => Lesson.group" class="text-danger" /> *@
+    <InputSelect @bind-Value="group" class="form-control" @onchange="SetGroup">
+        <option value="-1">--- Выберите группу ---</option>
+        @foreach (Group group in Context.Groups)
+        {
+            <option value="@group.group_id">@group.group_name</option>
+        }
+    </InputSelect>
+</div>
+
+@code 
+{
+    // AcademyContext context;
+    [Parameter]
+    public Group Group { get; set; }
+    [Parameter]
+    public AcademyContext Context { get; set; }
+    int group = -1;
+
+    // protected override void OnInitialized()
+    // {
+    //     context = DbFactory.CreateDbContext();
+    // }
+    void SetGroup()
+    {
+        Group = Context.Groups.Where(g => g.group_id == this.group).First();
+    }
+}

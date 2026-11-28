@@ -1,4 +1,5 @@
 @page "/lessons/create"
+@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -14,25 +15,10 @@
     <div class="col-md-4">
         <EditForm method="post" Model="Lesson" OnValidSubmit="AddLesson" FormName="create" Enhance>
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
-            <div class="mb-3">
-                <span class="text-danger">*</span>
-                <label for="group" class="form-label">group:</label> 
-                <InputNumber id="group" @bind-Value="Lesson.group" class="form-control" aria-required="true"/> 
-                <ValidationMessage For="() => Lesson.group" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <span class="text-danger">*</span>
-                <label for="discipline" class="form-label">discipline:</label> 
-                <InputNumber id="discipline" @bind-Value="Lesson.discipline" class="form-control" aria-required="true"/> 
-                <ValidationMessage For="() => Lesson.discipline" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <span class="text-danger">*</span>
-                <label for="teacher" class="form-label">teacher:</label> 
-                <InputNumber id="teacher" @bind-Value="Lesson.teacher" class="form-control" aria-required="true"/> 
-                <ValidationMessage For="() => Lesson.teacher" class="text-danger" /> 
-            </div>        
+			<ValidationSummary class="text-danger" role="alert" />
+			<CB_group Group="Group" Context="this.context" />
+            <CB_discipline @bind-Discipline="Discipline" Context="this.context" />
+            <CB_teacher Teacher="Teacher" Discipline="Discipline" Context="this.context" />
             <div class="mb-3">
                 <span class="text-danger">*</span>
                 <label for="date" class="form-label">date:</label> 
@@ -63,7 +49,20 @@
     [SupplyParameterFromForm]
     private Lesson Lesson { get; set; } = default!;
 
-    protected override void OnInitialized() => Lesson ??= new();
+    Group Group { get; set; } = default!;
+    Discipline Discipline { get; set; } = default!;
+    Teacher Teacher { get; set; } = default!;
+
+    AcademyContext context;
+    protected override void OnInitialized()
+    {
+        Lesson ??= new();
+        context = DbFactory.CreateDbContext();
+    }
+    // protected override void OnInitialized()
+    // {
+    //     context = DbFactory.CreateDbContext();
+    // }
 
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddLesson()

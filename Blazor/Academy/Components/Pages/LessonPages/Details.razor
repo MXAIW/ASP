@@ -6,16 +6,18 @@
 
 <PageTitle>Details</PageTitle>
 
-<h1>Details</h1>
+@* <h1>Details</h1> *@
 
 <div>
-    <h2>Lesson</h2>
-    <hr />
+    @* <h2>Lesson</h2>
+    <hr /> *@
     @if (lesson is null)
     {
         <p><em>Loading...</em></p>
     }
     else {
+        <h1>@lesson.Discipline.discipline_name @lesson.date</h1>
+        <hr />
         <dl class="row">
             <dt class="col-sm-2">group</dt>
             <dd class="col-sm-10">@lesson.group</dd>
@@ -46,7 +48,7 @@
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        lesson = await context.Schedule.FirstOrDefaultAsync(m => m.lesson_id == lesson_id);
+        lesson = await context.Schedule.Include(d => d.Discipline).FirstOrDefaultAsync(m => m.lesson_id == lesson_id);
 
         if (lesson is null)
         {

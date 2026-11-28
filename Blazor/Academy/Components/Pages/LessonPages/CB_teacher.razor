@@ -1,0 +1,46 @@
+﻿@using Academy.Models;
+@using Microsoft.EntityFrameworkCore;
+@inject IDbContextFactory<AcademyContext> DbFactory;
+
+<div class="mb-3">
+	<span class="text-danger">*</span>
+	<label for="teacher" class="form-label">teacher:</label>
+	@* <InputNumber id="teacher" @bind-Value="Lesson.teacher" class="form-control" aria-required="true" /> *@
+	@* <ValidationMessage For="() => Lesson.teacher" class="text-danger" /> *@
+	<InputSelect @bind-Value="teacher" class="form-control">
+		@if (Discipline != null)
+		{
+			<option value="-1">--- Выберите преподавателя ---</option>
+			@foreach (TeachersDisciplinesRelation tdr in Discipline.TDR)
+			{
+				<option value="@tdr.Teacher.teacher_id">@tdr.Teacher.full_name</option>
+			}
+		}
+		else
+		{
+			<option disabled value="-2">--- Для начала выберите дисциплину ---</option>
+		}
+	</InputSelect>
+</div>
+
+@code 
+{
+	[Parameter]
+	public Teacher Teacher { get; set; }
+	[Parameter]
+	public Discipline Discipline { get; set; }
+	[Parameter]
+	public AcademyContext Context { get; set; }
+	int teacher = -1;
+
+	protected override void OnInitialized()
+	{
+		//=> this.teacher = Discipline != null ? -1 : -2;
+	}
+	
+
+	protected override void OnParametersSet()
+	{
+		
+	}
+}
